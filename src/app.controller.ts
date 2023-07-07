@@ -1,14 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { ColorService as AppService } from './app.service';
 
-@Controller('color')
+@Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getColor() {
-    return {
-      color: this.appService.getRandomColor(),
-    };
+  hello() {
+    return this.appService.getHello();
   }
 }
