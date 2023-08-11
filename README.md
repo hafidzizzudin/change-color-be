@@ -61,6 +61,22 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Deployment production
+```bash
+# Build image
+docker build -t color-backend-image .
+
+# Stop and Remove previous container if exists. Ignore if there is error message no such container
+docker stop color_backend || true
+docker rm color_backend || true
+
+# Run container and will serve at port 3000 
+# assumed postgres is run in docker host
+docker run --name color_backend --network="host" --restart always -d color-backend-image
+# otherwise
+docker run --name color_backend -p3000:3000 --restart always -d color-backend-image
+```
+
 ## Test
 
 ```bash
