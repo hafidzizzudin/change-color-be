@@ -59,7 +59,12 @@ export class ColorsService {
       .execute();
   }
 
-  async getAll(): Promise<Color[]> {
-    return await this.colorRepository.find();
+  async getAll(page: number, limit: number): Promise<Color[]> {
+    limit = Math.round(limit);
+    const offset = Math.round((page - 1) * limit);
+    return await this.colorRepository.query(
+      `SELECT * FROM colors LIMIT $1 OFFSET $2`,
+      [limit, offset],
+    );
   }
 }
