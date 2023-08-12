@@ -12,8 +12,13 @@ export class ColorsService {
   ) {}
 
   async create(createColorDto: CreateColorDto) {
+    const data = await this.findOne(createColorDto.color);
+    if (data !== undefined) {
+      return data;
+    }
+
     const color = new Color(createColorDto);
-    await this.entityManager.save(color);
+    return await this.entityManager.save(color);
   }
 
   async getRandomColor(): Promise<Color> {
@@ -38,11 +43,22 @@ export class ColorsService {
     return color[0];
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} color`;
+  async findOne(color: string): Promise<Color> {
+    const colorEntry = await this.colorRepository.query(
+      `SELECT * FROM colors WHERE color = $1 LIMIT 1`,
+      [color],
+    );
+
+    return colorEntry[0];
   }
 
   remove(id: number) {
     return `This action removes a #${id} color`;
+  }
+
+  async removeAll(colors: string[]) {
+    await this.colorRepository.query(`DELETE from colors WHERE color in ($1)`, [
+      colors,
+    ]);
   }
 }

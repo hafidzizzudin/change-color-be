@@ -16,9 +16,9 @@ export class ColorsController {
     return await this.colorsService.getRandomColor();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.colorsService.findOne(+id);
+  @Get(':color')
+  async findOne(@Param('color') color: string) {
+    return await this.colorsService.findOne(color);
   }
 
   @Delete(':id')
