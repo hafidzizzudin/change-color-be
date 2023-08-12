@@ -11,6 +11,7 @@ describe('ColorsService', () => {
   const randomColor = 'random_color';
 
   afterAll(async () => {
+    // clear all data dummy
     await service.removeAll(colors);
   });
 
@@ -31,7 +32,7 @@ describe('ColorsService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('getColor', () => {
+  describe('Color service', () => {
     it('Should get undefined color', async () => {
       const color: Color = await service.findOne(randomColor);
       expect(color).toBeUndefined();
@@ -50,8 +51,14 @@ describe('ColorsService', () => {
         const color = await service.getRandomColor();
         colors[color.color] = true;
       }
-      console.log(Object.keys(colors));
       expect(Object.keys(colors).length).toBeGreaterThan(1);
+    });
+
+    it('remove all test colors', async () => {
+      await service.removeAll(colors);
+      colors.forEach(async (color: string) => {
+        expect(await service.findOne(color)).toBeUndefined();
+      });
     });
   });
 });

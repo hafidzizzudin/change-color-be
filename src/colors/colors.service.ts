@@ -38,8 +38,6 @@ export class ColorsService {
       [randIdx],
     );
 
-    // console.log(color);
-
     return color[0];
   }
 
@@ -52,13 +50,16 @@ export class ColorsService {
     return colorEntry[0];
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} color`;
+  async removeAll(colors: string[]) {
+    return await this.colorRepository
+      .createQueryBuilder()
+      .delete()
+      .from(Color)
+      .where('color in (:...colors)', { colors: colors })
+      .execute();
   }
 
-  async removeAll(colors: string[]) {
-    await this.colorRepository.query(`DELETE from colors WHERE color in ($1)`, [
-      colors,
-    ]);
+  async getAll(): Promise<Color[]> {
+    return await this.colorRepository.find();
   }
 }
